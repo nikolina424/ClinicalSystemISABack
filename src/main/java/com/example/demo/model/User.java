@@ -1,23 +1,23 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
-enum Role {
-    DOCTOR("DOCTOR"), ADMIN("ADMIN"), PATIENT("PATIENT"), SISTER("SISTER"), ADMINC("ADMINC");
-
-    private String value;
-
-    Role(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return this.value;
-    }
-}
-
-@MappedSuperclass
-public class User {
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    @JsonIgnore
     private String password;
     private String address;
     private String city;
@@ -32,144 +33,104 @@ public class User {
     private Integer phoneNumber;
     private Integer userId;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole role;
+    private boolean enabled;
+    private Timestamp lastPasswordResetDate;
 
-    public User() {
+    //veze sa bazom
+    // samo doktor, sestra i admin klinike moze ovde
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Clinic clinic;
+
+    //samo admin klinickog centra moze ovde
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ClinicCenter clinicCenter;
+
+    //doktori
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Room room;
+
+    //doktori
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Operation operation;
+
+    //pacijent sa zdravstvenim kartonom, nova tabela
+    @OneToOne
+    @JoinTable(
+            name = "patient_med_record",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "med_record_id")
+    )
+    private MedicalRecord medicalRecord;
+
+    //operacije i pacijenti, nova tabela
+    @OneToOne
+    @JoinTable(
+            name = "patient_operation",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "operation_id")
+    )
+    private Operation operationPatient;
+
+    @ManyToMany
+    @JoinTable(
+            name="user_authorities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_name", referencedColumnName = "name")
+    )
+    private List<Authority> authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
     }
 
-    public User(Long id, String firstName, String lastName, Role role) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.role = role;
-    }
-
-    public User(Long id, String firstName, String lastName, String email, String password, Role role) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public User(Long id, String firstName, String lastName, String email, String password, String address, String city, String country, Integer phoneNumber, Integer userId, Role role) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.userId = userId;
-        this.role = role;
-    }
-
-    public User(Long id, String firstName, String lastName, String email, String password, String address, String city, String country, Integer phoneNumber, Integer userId, String role) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.city = city;
-        this.country = country;
-        this.phoneNumber = phoneNumber;
-        this.userId = userId;
-        this.role = Role.valueOf(role);
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
-    public String getLastName() {
-        return lastName;
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public Role getRole() {
-        return role;
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getRoleValue() {
-        return this.role.getValue();
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Integer getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Integer phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    @Override
+    public String getUsername() {
+        return email;
     }
 }

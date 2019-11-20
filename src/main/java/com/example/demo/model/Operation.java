@@ -1,9 +1,17 @@
 package com.example.demo.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Operation {
 
@@ -22,10 +30,10 @@ public class Operation {
     private Integer duration;
 
     @OneToMany(mappedBy = "operation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Doctor> doctorList = new ArrayList<Doctor>();
+    private List<User> userList = new ArrayList<>();
 
     @OneToOne(mappedBy = "operationPatient")
-    private Patient patient;
+    private User patient;
 
     @OneToOne(mappedBy = "operationRoom")
     private Room room;

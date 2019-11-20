@@ -1,9 +1,16 @@
 package com.example.demo.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Clinic {
 
@@ -17,45 +24,7 @@ public class Clinic {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ClinicCenter clinicCenter;
 
+    //veze sa klinikom mogu imati doktor, sestra i admin klinike
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Doctor> doctorList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "clinicM", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<MedicalSister> medicalSisterList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "clinicA", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<AdminClinic> adminClinicList = new ArrayList<>();
-
-    public Clinic() {
-    }
-
-    public Clinic(Long id, String name, ClinicCenter clinicCenter) {
-        this.id = id;
-        this.name = name;
-        this.clinicCenter = clinicCenter;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public ClinicCenter getClinicCenter() {
-        return clinicCenter;
-    }
-
-    public void setClinicCenter(ClinicCenter clinicCenter) {
-        this.clinicCenter = clinicCenter;
-    }
+    private List<User> userList = new ArrayList<>();
 }
