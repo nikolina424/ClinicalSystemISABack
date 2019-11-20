@@ -1,9 +1,16 @@
 package com.example.demo.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class MedicalRecord {
 
@@ -12,7 +19,7 @@ public class MedicalRecord {
     private Long id;
 
     @OneToOne(mappedBy = "medicalRecord")
-    private Patient patient;
+    private User user;
 
     @OneToMany(mappedBy = "medRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Visit> visitList = new ArrayList<Visit>();
@@ -24,46 +31,4 @@ public class MedicalRecord {
             inverseJoinColumns = @JoinColumn(name = "sick_id")
     )
     private List<Sick> sickList = new ArrayList<Sick>();
-
-    public MedicalRecord() {
-    }
-
-    public MedicalRecord(Long id, Patient patient, List<Visit> visitList, List<Sick> sickList) {
-        this.id = id;
-        this.patient = patient;
-        this.visitList = visitList;
-        this.sickList = sickList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public List<Visit> getVisitList() {
-        return visitList;
-    }
-
-    public void setVisitList(List<Visit> visitList) {
-        this.visitList = visitList;
-    }
-
-    public List<Sick> getSickList() {
-        return sickList;
-    }
-
-    public void setSickList(List<Sick> sickList) {
-        this.sickList = sickList;
-    }
 }

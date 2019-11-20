@@ -1,100 +1,78 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserDTOLogin;
-import com.example.demo.dto.UserDTORegister;
-import com.example.demo.model.Doctor;
-import com.example.demo.model.MedicalSister;
-import com.example.demo.model.Patient;
+import com.example.demo.dto.UserTokenState;
+import com.example.demo.exception.ResourceConflictException;
 import com.example.demo.model.User;
+import com.example.demo.security.TokenUtils;
 import com.example.demo.service.*;
 import com.example.demo.view.UserViewLogin;
 import com.example.demo.view.UserViewRegister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 public class LoginController {
 
     @Autowired
-    private DoctorService doctorService;
+    TokenUtils tokenUtils;
 
     @Autowired
-    private MedicalSisterService medicalSisterService;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private PatientService patientService;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private AdminClinicService adminClinicService;
+    private UserService userService;
 
-    @Autowired
-    private AdminClinicCenterService adminClinicCenterService;
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/login")
+    public ResponseEntity<UserTokenState> login(@RequestBody UserViewLogin user) throws AuthenticationException, IOException {
 
-    @PostMapping(value = "/login")
-    public ResponseEntity<UserDTOLogin> login(@RequestBody UserViewLogin user) {
-        User existingD = this.doctorService.findOneByEmailAndPassword(user.getEmail(), user.getPassword());
-        System.out.println(existingD);
+        final Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
 
-        if (existingD != null) {
-            System.out.println(existingD);
-            return ResponseEntity.ok(new UserDTOLogin(existingD));
-        }
+        //ubaci username(email) + password u kontext
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        User existingMS = this.medicalSisterService.findOneByEmailAndPassword(user.getEmail(), user.getPassword());
-
-        if (existingMS != null) {
-            return ResponseEntity.ok(new UserDTOLogin(existingMS));
-        }
-
-        User existingP = this.patientService.findOneByEmailAndPassword(user.getEmail(), user.getPassword());
-
-        if (existingP != null) {
-            return ResponseEntity.ok(new UserDTOLogin(existingP));
-        }
-
-        User existingA = this.adminClinicService.findOneByEmailAndPassword(user.getEmail(), user.getPassword());
-
-        if (existingA != null) {
-            return ResponseEntity.ok(new UserDTOLogin(existingA));
-        }
-
-        User existingAC = this.adminClinicCenterService.findOneByEmailAndPassword(user.getEmail(), user.getPassword());
-
-        if (existingAC != null) {
-            return ResponseEntity.ok(new UserDTOLogin(existingAC));
-        }
-
-        return null;
+        //Kreiraj token
+        User userToken = (User) authentication.getPrincipal();
+        String jwt = tokenUtils.generateToken(userToken.getEmail());
+        int expiresIn = tokenUtils.getExpiredIn();
+        //vrati token kao odgovor na uspesnu autentifikaciju
+        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<UserDTORegister> register(@RequestBody UserViewRegister user) {
+    public ResponseEntity<?> register(@RequestBody UserViewRegister user, UriComponentsBuilder ucBuilder) {
 
-        if (user.getRepeatPassword() != user.getPassword())
+        if (!user.getRepeatPassword().equals(user.getPassword()))
             return null;
 
-        User newUser = new User(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getAddress(), user.getCity(), user.getCountry(), user.getPhoneNumber(), user.getUserId(), user.getRole());
-
-        if (user.getRole().equals("Doctor")) {
-            User doctorUser = this.doctorService.save(new Doctor(newUser.getId(), newUser.getFirstName(), newUser.getLastName(), newUser.getEmail(), newUser.getPassword(), newUser.getAddress(), newUser.getCity(), newUser.getCountry(), newUser.getPhoneNumber(), newUser.getUserId(), newUser.getRole()));
-            return ResponseEntity.ok(new UserDTORegister(doctorUser));
+        User userFind = this.userService.findOneByEmail(user.getEmail());
+        if (userFind != null) {
+            throw new ResourceConflictException(user.getId(), "User with that email already exists");
         }
 
-        if (user.getRole().equals("Patient")) {
-            User patientUser = this.patientService.save(new Patient(newUser.getId(), newUser.getFirstName(), newUser.getLastName(), newUser.getEmail(), newUser.getPassword(), newUser.getAddress(), newUser.getCity(), newUser.getCountry(), newUser.getPhoneNumber(), newUser.getUserId(), newUser.getRole()));
-            return ResponseEntity.ok(new UserDTORegister(patientUser));
-        }
-
-        if (user.getRole().equals("Patient")) {
-            User nurseUser = this.medicalSisterService.save(new MedicalSister(newUser.getId(), newUser.getFirstName(), newUser.getLastName(), newUser.getEmail(), newUser.getPassword(), newUser.getAddress(), newUser.getCity(), newUser.getCountry(), newUser.getPhoneNumber(), newUser.getUserId(), newUser.getRole()));
-            return ResponseEntity.ok(new UserDTORegister(nurseUser));
-        }
-
-        return null;
+        User saveUser = this.userService.save(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/api/user/userId}").buildAndExpand(saveUser.getId()).toUri());
+        return new ResponseEntity<User>(saveUser, HttpStatus.CREATED);
     }
 }
