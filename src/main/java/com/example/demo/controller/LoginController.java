@@ -52,7 +52,7 @@ public class LoginController {
 
         //Kreiraj token
         User userToken = (User) authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(userToken.getEmail());
+        String jwt = tokenUtils.generateToken(userToken.getEmail(), userToken.getRole().getRole());
         int expiresIn = tokenUtils.getExpiredIn();
         //vrati token kao odgovor na uspesnu autentifikaciju
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
