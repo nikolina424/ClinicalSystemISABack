@@ -5,6 +5,7 @@ import com.example.demo.model.User;
 import com.example.demo.model.UserRole;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.view.UserViewRegister;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,8 +55,13 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public User findOneByEmailAndPassword(String email, String password) {
-        return this.userRepository.findOneByEmailAndPassword(email, password);
+    public User findOneByEmailAndPassword(String email, String password) throws NotFoundException {
+        User user =  this.userRepository.findOneByEmail(email);
+        if (!this.passwordEncoder.matches(password, user.getPassword())) {
+            throw new NotFoundException("Not existing user");
+        }
+
+        return user;
     }
 
     public User findOneByEmail(String email) {
