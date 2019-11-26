@@ -14,9 +14,6 @@ public class Authority implements GrantedAuthority {
 
     String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Role roles;
-
     @Override
     public String getAuthority() {
         return name;

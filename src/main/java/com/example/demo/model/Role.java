@@ -14,13 +14,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "role_authorities")
 public class Role {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @OneToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Authority> authorities = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "role_authorities",
+            joinColumns = @JoinColumn(name = "role_name", referencedColumnName = "role"),
+            inverseJoinColumns = @JoinColumn(name = "authority_name", referencedColumnName = "name")
+    )
+    private List<Authority> authorityList;
 
 }
