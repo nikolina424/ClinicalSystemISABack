@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserViewLogin {
+public class UserViewChangePassword {
 
-    private String email;
-    private String password;
+    private String oldPass;
+    private String newPass;
+    private String newRepeatPass;
 }

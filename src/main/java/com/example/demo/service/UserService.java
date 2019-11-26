@@ -5,6 +5,7 @@ import com.example.demo.model.User;
 import com.example.demo.model.UserRole;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.view.UserViewRegister;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,18 +45,25 @@ public class UserService {
                 .phoneNumber(user.getPhoneNumber()).userId(user.getUserId()).role(UserRole.valueOf(user.getRole()))
                 .enabled(true).build();
 
-        List<Authority> auth = this.authorityService.findByName(user.getRole());
-        u.setAuthorities(auth);
-
         return this.userRepository.save(u);
+    }
+
+    public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return this.userRepository.save(user);
     }
 
     public void remove(Long id) {
         this.userRepository.deleteById(id);
     }
 
-    public User findOneByEmailAndPassword(String email, String password) {
-        return this.userRepository.findOneByEmailAndPassword(email, password);
+    public User findOneByEmailAndPassword(String email, String password) throws NotFoundException {
+        User user =  this.userRepository.findOneByEmail(email);
+        if (!this.passwordEncoder.matches(password, user.getPassword())) {
+            throw new NotFoundException("Not existing user");
+        }
+
+        return user;
     }
 
     public User findOneByEmail(String email) {

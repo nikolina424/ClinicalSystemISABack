@@ -1,6 +1,7 @@
 package com.example.demo.security.auth;
 
 import com.example.demo.security.TokenUtils;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,6 +40,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             if (username != null) {
                 // uzmi user-a na osnovu username-a
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                Hibernate.initialize(userDetails);
+                Hibernate.initialize(userDetails.getAuthorities());
 
                 // proveri da li je prosledjeni token validan
                 if (tokenUtils.validateToken(authToken, userDetails)) {

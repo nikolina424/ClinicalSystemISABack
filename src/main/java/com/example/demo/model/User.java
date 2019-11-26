@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private UserRole role;
     private boolean enabled;
     private Timestamp lastPasswordResetDate;
+    private boolean firstTimeLogged = true;
 
     //veze sa bazom
     // samo doktor, sestra i admin klinike moze ovde
@@ -72,26 +73,14 @@ public class User implements UserDetails {
     )
     private Operation operationPatient;
 
-    @ManyToMany
-    @JoinTable(
-            name="user_authorities",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "authority_name", referencedColumnName = "name")
-    )
-    private List<Authority> authorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return null;
     }
 
     @Override
     public String getPassword() {
         return password;
-    }
-
-    public void setAuthorities(List<Authority> authorities) {
-        this.authorities = authorities;
     }
 
     @Override
