@@ -27,4 +27,8 @@ public class AuthorityService {
         auths.add(auth);
         return auths;
     }
+
+    public List<Authority> findAllByRoleName(String name) {
+        return this.authorityRepository.findAllByRoleName(name);
+    }
 }
