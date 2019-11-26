@@ -45,10 +45,12 @@ public class UserService {
                 .phoneNumber(user.getPhoneNumber()).userId(user.getUserId()).role(UserRole.valueOf(user.getRole()))
                 .enabled(true).build();
 
-        List<Authority> auth = this.authorityService.findByName(user.getRole());
-        u.setAuthorities(auth);
-
         return this.userRepository.save(u);
+    }
+
+    public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return this.userRepository.save(user);
     }
 
     public void remove(Long id) {
