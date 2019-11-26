@@ -6,7 +6,7 @@ insert into clinic (name, clinic_center_id) values ('Klinika 2', 1);
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
 
-insert into users (first_name, last_name, email, password, city, country, phone_number, user_id, role, enabled) values ('Stefan', 'Pejakovic', 'spejakovic4@gmail.com', '$2a$10$PckbyvdiGuU9H9HIzQT8nuMX/n30JwNMCmH/MbK6UWVQbggL55rnm', 'Kula', 'Srbija', 0613729356, 0208997, 'ADMINCC', true);
+insert into users (first_name, last_name, email, password, city, country, phone_number, user_id, role, enabled, first_time_logged) values ('Stefan', 'Pejakovic', 'spejakovic4@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Kula', 'Srbija', 0613729356, 0208997, 'ADMINCC', true, true);
 
 insert into operation (description, date_time, duration_hours) values ('Transplatacija bubrega', '2019-9-8', 7);
 insert into operation (description, date_time, duration_hours) values ('Transplatacija srca', '2019-3-25', 12);
@@ -31,12 +31,25 @@ insert into medicine (name) values ('Amoksicilin');
 insert into recipe (name, medicine_id) values ('Recept1', 2);
 insert into recipe (name, medicine_id) values ('Recept2', 3);
 
-insert into authority (name) values ('ADMINCC');
+insert into authority (name) values ('MANAGE_ADMIN');
+insert into authority (name) values ('MANAGE_CLINIC');
+insert into authority (name) values ('MANAGE_OPERATION');
+
+insert into role (role) values ('ADMINCC');
+insert into role (role) values ('DOCTOR');
+insert into role (role) values ('NURSE');
+insert into role (role) values ('ADMINC');
+insert into role (role) values ('PATIENT');
+
+insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MANAGE_ADMIN');
+insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MANAGE_CLINIC');
+insert into role_authorities (role_name, authority_name) values ('DOCTOR', 'MANAGE_OPERATION');
 
 DROP TABLE IF EXISTS admin_clinic CASCADE;
 DROP TABLE IF EXISTS admin_clinic_center CASCADE;
 DROP TABLE IF EXISTS doctor CASCADE;
 DROP TABLE IF EXISTS medical_sister CASCADE;
+DROP TABLE IF EXISTS user_authorities CASCADE;
 
 alter sequence users_id_seq restart with 2;
 alter sequence clinic_center_id_seq restart with 2;
