@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserTokenState;
 import com.example.demo.exception.ResourceConflictException;
+import com.example.demo.model.Authority;
 import com.example.demo.model.User;
 import com.example.demo.security.TokenUtils;
 import com.example.demo.service.*;
@@ -24,6 +25,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.List;
+
+import static com.example.demo.model.UserRole.ADMINC;
+import static com.example.demo.model.UserRole.ADMINCC;
 
 @RestController
 public class LoginController {
@@ -40,17 +45,21 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthorityService authorityService;
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/login")
     public ResponseEntity<UserTokenState> login(@RequestBody UserViewLogin user) throws AuthenticationException, NotFoundException {
 
         User logged = this.userService.findOneByEmailAndPassword(user.getEmail(), user.getPassword());
-
         if (logged == null)
             throw new NotFoundException("Not existing user");
 
+        List<Authority> auth = this.authorityService.findAllByRoleName(logged.getRole().getRole());
+
         final Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), logged.getAuthorities()));
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), auth));
 
         //ubaci username(email) + password u kontext
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -88,10 +97,15 @@ public class LoginController {
         if (!user.getNewPass().equals(user.getNewRepeatPass()))
             return null;
 
-        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        loggedUser.setPassword(user.getNewPass());
-        loggedUser.setFirstTimeLogged(false);
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (ADMINC.equals(principal.getRole()) || ADMINCC.equals(principal.getRole())) {
+            User logged = this.userService.findOneByEmail(principal.getEmail());
+            logged.setPassword(user.getNewPass());
+            logged.setFirstTimeLogged(false);
 
-        return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
+            return new ResponseEntity<>(this.userService.save(logged), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
