@@ -48,6 +48,9 @@ public class LoginController {
     @Autowired
     private AuthorityService authorityService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/login")
     public ResponseEntity<UserTokenState> login(@RequestBody UserViewLogin user) throws AuthenticationException, NotFoundException {
@@ -95,10 +98,12 @@ public class LoginController {
     public ResponseEntity<?> changePassword(@RequestBody UserViewChangePassword user) {
 
         if (!user.getNewPass().equals(user.getNewRepeatPass()))
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (ADMINC.equals(principal.getRole()) || ADMINCC.equals(principal.getRole())) {
+        boolean check = passwordEncoder.matches(user.getOldPass(), principal.getPassword());
+
+        if ((ADMINC.equals(principal.getRole()) || ADMINCC.equals(principal.getRole())) && check) {
             User logged = this.userService.findOneByEmail(principal.getEmail());
             logged.setPassword(user.getNewPass());
             logged.setFirstTimeLogged(false);
