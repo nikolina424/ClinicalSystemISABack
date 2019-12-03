@@ -30,4 +30,8 @@ public class Room {
     @OneToOne
     @JoinColumn(name = "operationId")
     private Operation operationRoom;
+
+    @OneToOne
+    @JoinColumn(name = "examinationId")
+    private Examination examinationRoom;
 }

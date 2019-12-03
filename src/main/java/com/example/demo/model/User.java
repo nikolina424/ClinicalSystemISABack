@@ -55,6 +55,9 @@ public class User implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Operation operation;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Examination examination;
+
     //pacijent sa zdravstvenim kartonom, nova tabela
     @OneToOne
     @JoinTable(
@@ -63,15 +66,6 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "med_record_id")
     )
     private MedicalRecord medicalRecord;
-
-    //operacije i pacijenti, nova tabela
-    @OneToOne
-    @JoinTable(
-            name = "patient_operation",
-            joinColumns = @JoinColumn(name = "patient_id"),
-            inverseJoinColumns = @JoinColumn(name = "operation_id")
-    )
-    private Operation operationPatient;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
