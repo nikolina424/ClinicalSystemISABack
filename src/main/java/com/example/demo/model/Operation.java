@@ -32,9 +32,6 @@ public class Operation {
     @OneToMany(mappedBy = "operation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> userList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "operationPatient")
-    private User patient;
-
     @OneToOne(mappedBy = "operationRoom")
     private Room room;
 }
