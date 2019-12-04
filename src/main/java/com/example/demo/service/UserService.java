@@ -69,4 +69,8 @@ public class UserService {
     public User findOneByEmail(String email) {
         return this.userRepository.findOneByEmail(email);
     }
+
+    public List<User> findAllByRole(UserRole role) {
+        return this.userRepository.findAllByRole(role);
+    }
 }
