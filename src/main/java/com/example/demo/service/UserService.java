@@ -26,8 +26,8 @@ public class UserService {
     @Autowired
     private AuthorityService authorityService;
 
-    public User findOne(Long id) {
-        return this.userRepository.findById(id).orElseGet(null);
+    public User findOneById(Long id) {
+        return this.userRepository.findOneById(id);
     }
 
     public List<User> findAll() {
