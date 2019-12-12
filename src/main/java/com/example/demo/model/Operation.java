@@ -29,7 +29,7 @@ public class Operation {
     @Column(name = "durationHours")
     private Integer duration;
 
-    @OneToMany(mappedBy = "operation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "operation", fetch = FetchType.EAGER)
     private List<User> userList = new ArrayList<>();
 
     @OneToOne(mappedBy = "operationRoom")
