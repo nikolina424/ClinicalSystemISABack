@@ -52,13 +52,6 @@ insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MAN
 insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MANAGE_CLINIC');
 insert into role_authorities (role_name, authority_name) values ('DOCTOR', 'MANAGE_OPERATION');
 
-DROP TABLE IF EXISTS admin_clinic CASCADE;
-DROP TABLE IF EXISTS admin_clinic_center CASCADE;
-DROP TABLE IF EXISTS doctor CASCADE;
-DROP TABLE IF EXISTS medical_sister CASCADE;
-DROP TABLE IF EXISTS user_authorities CASCADE;
-DROP TABLE IF EXISTS patient_operation CASCADE;
-
 alter sequence users_id_seq restart with 2;
 alter sequence clinic_center_id_seq restart with 2;
 alter sequence clinic_id_seq restart with 3;
