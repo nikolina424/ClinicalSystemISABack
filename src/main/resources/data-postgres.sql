@@ -1,7 +1,7 @@
 insert into clinic_center (name) values ('Klinicki Centar VNS');
 
-insert into clinic (name, clinic_center_id) values ('Klinika 1', 1);
-insert into clinic (name, clinic_center_id) values ('Klinika 2', 1);
+insert into clinic (name) values ('Klinika 1');
+insert into clinic (name) values ('Klinika 2');
 
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
