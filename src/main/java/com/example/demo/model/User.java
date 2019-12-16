@@ -40,8 +40,8 @@ public class User implements UserDetails {
 
     //veze sa bazom
     // samo doktor, sestra i admin klinike moze ovde
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Clinic clinic;
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Clinic clinic;
 
     //samo admin klinickog centra moze ovde
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
