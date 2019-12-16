@@ -21,10 +21,10 @@ public class Clinic {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ClinicCenter clinicCenter;
-
-    //veze sa klinikom mogu imati doktor, sestra i admin klinike
-    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> userList = new ArrayList<>();
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private ClinicCenter clinicCenter;
+//
+//    //veze sa klinikom mogu imati doktor, sestra i admin klinike
+//    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<User> userList = new ArrayList<>();
 }
