@@ -43,13 +43,12 @@ public class UserService {
                 .firstName(user.getFirstName()).lastName(user.getLastName())
                 .address(user.getAddress()).city(user.getCity()).country(user.getCountry())
                 .phoneNumber(user.getPhoneNumber()).userId(user.getUserId()).role(UserRole.valueOf(user.getRole()))
-                .enabled(true).build();
+                .enabled(true).firstTimeLogged(true).build();
 
         return this.userRepository.save(u);
     }
 
     public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return this.userRepository.save(user);
     }
 
