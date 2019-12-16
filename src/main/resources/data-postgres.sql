@@ -11,7 +11,6 @@ insert into users (first_name, last_name, email, password, city, country, phone_
 insert into users (first_name, last_name, email, password, city, country, phone_number, user_id, role, enabled, first_time_logged) values ('Marko', 'Markic', 'mmic@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Novi Sad', 'Srbija', 0634850341, 9834130, 'PATIENT', true, true);
 insert into users (first_name, last_name, email, password, city, country, phone_number, user_id, role, enabled, first_time_logged) values ('Nikola', 'Narkic', 'nark@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Krusevac', 'Srbija', 0624831490, 5503491, 'PATIENT', true, true);
 
-
 insert into operation (description, date_time, duration_hours) values ('Transplatacija bubrega', '2019-9-8', 7);
 insert into operation (description, date_time, duration_hours) values ('Transplatacija srca', '2019-3-25', 12);
 
@@ -52,7 +51,7 @@ insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MAN
 insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MANAGE_CLINIC');
 insert into role_authorities (role_name, authority_name) values ('DOCTOR', 'MANAGE_OPERATION');
 
-alter sequence users_id_seq restart with 2;
+alter sequence users_id_seq restart with 5;
 alter sequence clinic_center_id_seq restart with 2;
 alter sequence clinic_id_seq restart with 3;
 alter sequence operation_id_seq restart with 3;

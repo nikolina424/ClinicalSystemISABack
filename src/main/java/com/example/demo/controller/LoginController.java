@@ -103,9 +103,9 @@ public class LoginController {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean check = passwordEncoder.matches(user.getOldPass(), principal.getPassword());
 
-        if ((ADMINC.equals(principal.getRole()) || ADMINCC.equals(principal.getRole())) && check) {
+        if (check) {
             User logged = this.userService.findOneByEmail(principal.getEmail());
-            logged.setPassword(user.getNewPass());
+            logged.setPassword(passwordEncoder.encode(user.getNewPass()));
             logged.setFirstTimeLogged(false);
 
             return new ResponseEntity<>(this.userService.save(logged), HttpStatus.OK);

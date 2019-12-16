@@ -56,6 +56,12 @@ public class UserController {
         if (loggedUser != null) {
             loggedUser.setFirstName(userEdit.getFirstName());
             loggedUser.setLastName(userEdit.getLastName());
+            loggedUser.setEmail(userEdit.getEmail());
+            loggedUser.setPhoneNumber(userEdit.getPhoneNumber());
+            loggedUser.setUserId(userEdit.getUserId());
+            loggedUser.setAddress(userEdit.getAddress());
+            loggedUser.setCity(userEdit.getCity());
+            loggedUser.setCountry(userEdit.getCountry());
             return new ResponseEntity<>(this.userService.save(loggedUser), HttpStatus.OK);
         }
 
