@@ -58,15 +58,6 @@ public class User implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Examination examination;
 
-    //pacijent sa zdravstvenim kartonom, nova tabela
-    @OneToOne
-    @JoinTable(
-            name = "patient_med_record",
-            joinColumns = @JoinColumn(name = "patient_id"),
-            inverseJoinColumns = @JoinColumn(name = "med_record_id")
-    )
-    private MedicalRecord medicalRecord;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

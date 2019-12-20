@@ -18,17 +18,13 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "medicalRecord")
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    @OneToMany(mappedBy = "medRecord", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Visit> visitList = new ArrayList<Visit>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Visit visit;
 
-    @ManyToMany
-    @JoinTable(
-            name = "patientSick",
-            joinColumns = @JoinColumn(name = "med_record_id"),
-            inverseJoinColumns = @JoinColumn(name = "sick_id")
-    )
-    private List<Sick> sickList = new ArrayList<Sick>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Sick sick;
+
 }
