@@ -34,6 +34,5 @@ public class Sick {
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Calendar dateEnd;
 
-    @ManyToMany(mappedBy = "sickList")
-    private List<MedicalRecord> medicalRecordList = new ArrayList<MedicalRecord>();
+
 }
