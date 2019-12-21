@@ -37,6 +37,7 @@ public class User implements UserDetails {
     private boolean enabled;
     private Timestamp lastPasswordResetDate;
     private boolean firstTimeLogged = true;
+    private String image;
 
     //veze sa bazom
     // samo doktor, sestra i admin klinike moze ovde
