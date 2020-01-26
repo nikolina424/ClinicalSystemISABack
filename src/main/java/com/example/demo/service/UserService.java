@@ -43,7 +43,7 @@ public class UserService {
                 .firstName(user.getFirstName()).lastName(user.getLastName())
                 .address(user.getAddress()).city(user.getCity()).country(user.getCountry())
                 .phoneNumber(user.getPhoneNumber()).userId(user.getUserId()).role(UserRole.valueOf(user.getRole()))
-                .enabled(true).firstTimeLogged(true).build();
+                .enabled(true).firstTimeLogged(true).predefined(false).build();
 
         return this.userRepository.save(u);
     }
