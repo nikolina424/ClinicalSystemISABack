@@ -24,9 +24,6 @@ public class Room {
     @Column(name = "free")
     private Boolean free;
 
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<User> userList = new ArrayList<>();
-
     @OneToOne
     @JoinColumn(name = "operationId")
     private Operation operationRoom;

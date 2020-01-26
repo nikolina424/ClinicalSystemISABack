@@ -20,11 +20,4 @@ public class ClinicCenter {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-//    @OneToMany(mappedBy = "clinicCenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<Clinic> clinicList = new ArrayList<Clinic>();
-
-    //samo admin klinickog centra sme
-    @OneToMany(mappedBy = "clinicCenter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> userList = new ArrayList<>();
 }

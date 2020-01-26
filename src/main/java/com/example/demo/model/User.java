@@ -35,29 +35,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private boolean enabled;
+    private boolean predefined;
     private Timestamp lastPasswordResetDate;
     private boolean firstTimeLogged = true;
     private String image;
-
-    //veze sa bazom
-    // samo doktor, sestra i admin klinike moze ovde
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Clinic clinic;
-
-    //samo admin klinickog centra moze ovde
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ClinicCenter clinicCenter;
-
-    //doktori
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Room room;
-
-    //doktori
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Operation operation;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Examination examination;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

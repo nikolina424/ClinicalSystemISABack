@@ -5,6 +5,7 @@ import com.example.demo.model.User;
 import com.example.demo.model.UserRole;
 import com.example.demo.service.StorageService;
 import com.example.demo.service.UserService;
+import com.example.demo.view.UserViewRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
+import static com.example.demo.model.UserRole.ADMINCC;
 import static com.example.demo.model.UserRole.DOCTOR;
 
 @RestController
@@ -36,6 +38,20 @@ public class UserController {
         if (DOCTOR.equals(user.getRole())) {
             List<User> patients = this.userService.findAllByRole(UserRole.valueOf("PATIENT"));
             return new ResponseEntity<>(patients, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/getClinicCenterAdmins")
+    public ResponseEntity<?> getClinicCenterAdmins() {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(user.getRole())) {
+            List<User> clinicCenterAdmins = this.userService.findAllByRole(UserRole.valueOf("ADMINCC"));
+            return new ResponseEntity<>(clinicCenterAdmins, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -69,6 +85,18 @@ public class UserController {
             loggedUser.setCity(userEdit.getCity());
             loggedUser.setCountry(userEdit.getCountry());
             return new ResponseEntity<>(this.userService.save(loggedUser), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(value = "/addNewClinicCenterAdmin")
+    public ResponseEntity<?> addNewClinicCenterAdmin(@RequestBody UserViewRegister user) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            return new ResponseEntity<>(this.userService.save(user), HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
