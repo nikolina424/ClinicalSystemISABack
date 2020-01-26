@@ -28,9 +28,6 @@ public class Examination {
     @Column(name = "durationHours")
     private Double duration;
 
-    @OneToMany(mappedBy = "operation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<User> userList = new ArrayList<>();
-
     @OneToOne(mappedBy = "examinationRoom")
     private Room room;
 }

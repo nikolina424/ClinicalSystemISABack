@@ -29,9 +29,6 @@ public class Operation {
     @Column(name = "durationHours")
     private Integer duration;
 
-    @OneToMany(mappedBy = "operation", fetch = FetchType.EAGER)
-    private List<User> userList = new ArrayList<>();
-
     @OneToOne(mappedBy = "operationRoom")
     private Room room;
 }
