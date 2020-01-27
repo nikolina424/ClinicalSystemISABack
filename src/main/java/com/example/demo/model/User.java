@@ -30,8 +30,8 @@ public class User implements UserDetails {
     private String address;
     private String city;
     private String country;
-    private Integer phoneNumber;
-    private Integer userId;
+    private Long phoneNumber;
+    private Long userId;
     @Enumerated(EnumType.STRING)
     private UserRole role;
     private boolean enabled;
