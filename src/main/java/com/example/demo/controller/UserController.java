@@ -79,8 +79,8 @@ public class UserController {
             loggedUser.setFirstName(userEdit.getFirstName());
             loggedUser.setLastName(userEdit.getLastName());
             loggedUser.setEmail(userEdit.getEmail());
-            loggedUser.setPhoneNumber(userEdit.getPhoneNumber());
-            loggedUser.setUserId(userEdit.getUserId());
+            loggedUser.setPhoneNumber(Long.valueOf(userEdit.getPhoneNumber()));
+            loggedUser.setUserId(Long.valueOf(userEdit.getUserId()));
             loggedUser.setAddress(userEdit.getAddress());
             loggedUser.setCity(userEdit.getCity());
             loggedUser.setCountry(userEdit.getCountry());
