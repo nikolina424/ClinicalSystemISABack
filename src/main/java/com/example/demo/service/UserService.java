@@ -34,11 +34,7 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public Page<User> findAll(Pageable page) {
-        return this.userRepository.findAll(page);
-    }
-
-    public User save(UserViewRegister user) {
+    public User saveAdminCC(UserViewRegister user) {
         User u = User.builder().email(user.getEmail()).password(passwordEncoder.encode(user.getPassword()))
                 .firstName(user.getFirstName()).lastName(user.getLastName())
                 .address(user.getAddress()).city(user.getCity()).country(user.getCountry())
@@ -48,12 +44,18 @@ public class UserService {
         return this.userRepository.save(u);
     }
 
-    public User save(User user) {
-        return this.userRepository.save(user);
+    public User save(UserViewRegister user) {
+        User u = User.builder().email(user.getEmail()).password(passwordEncoder.encode(user.getPassword()))
+                .firstName(user.getFirstName()).lastName(user.getLastName())
+                .address(user.getAddress()).city(user.getCity()).country(user.getCountry())
+                .phoneNumber(Long.valueOf(user.getPhoneNumber())).userId(Long.valueOf(user.getUserId())).role(UserRole.valueOf(user.getRole()))
+                .enabled(false).firstTimeLogged(true).predefined(false).build();
+
+        return this.userRepository.save(u);
     }
 
-    public void remove(Long id) {
-        this.userRepository.deleteById(id);
+    public User save(User user) {
+        return this.userRepository.save(user);
     }
 
     public User findOneByEmailAndPassword(String email, String password) throws NotFoundException {
@@ -71,5 +73,9 @@ public class UserService {
 
     public List<User> findAllByRole(UserRole role) {
         return this.userRepository.findAllByRole(role);
+    }
+
+    public void deleteUser(Long id) {
+        this.userRepository.delete(id);
     }
 }

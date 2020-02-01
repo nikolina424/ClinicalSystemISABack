@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.TimeProvider;
 import com.example.demo.dto.UserTokenState;
 import com.example.demo.exception.ResourceConflictException;
 import com.example.demo.model.Authority;
+import com.example.demo.model.Request;
 import com.example.demo.model.User;
 import com.example.demo.security.TokenUtils;
 import com.example.demo.service.*;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 import static com.example.demo.model.UserRole.ADMINC;
@@ -44,6 +47,12 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RequestService requestService;
+
+    @Autowired
+    private TimeProvider timeProvider;
 
     @Autowired
     private AuthorityService authorityService;
@@ -87,10 +96,14 @@ public class LoginController {
             throw new ResourceConflictException(user.getId(), "User with that email already exists");
         }
 
-        User saveUser = this.userService.save(user);
+        User newUser = this.userService.save(user);
+        Request newRequest = new Request();
+        newRequest.setUser(newUser);
+        newRequest.setDateOfRequest(new Date(timeProvider.now().getTime()));
+        Request saveRequest = this.requestService.save(newRequest);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/user/userId}").buildAndExpand(saveUser.getId()).toUri());
-        return new ResponseEntity<User>(saveUser, HttpStatus.CREATED);
+        headers.setLocation(ucBuilder.path("/api/user/userId}").buildAndExpand(newUser.getId()).toUri());
+        return new ResponseEntity<Request>(saveRequest, HttpStatus.CREATED);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
