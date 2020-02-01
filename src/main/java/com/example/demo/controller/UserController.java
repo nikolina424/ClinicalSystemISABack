@@ -96,7 +96,7 @@ public class UserController {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
-            return new ResponseEntity<>(this.userService.save(user), HttpStatus.CREATED);
+            return new ResponseEntity<>(this.userService.saveAdminCC(user), HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
