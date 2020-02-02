@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Request;
 import com.example.demo.model.User;
+import com.example.demo.service.HolidayService;
 import com.example.demo.service.RequestService;
 import com.example.demo.service.UserService;
 import net.bytebuddy.utility.RandomString;
@@ -24,6 +25,9 @@ public class RequestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HolidayService holidayService;
+
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/getRequests")
     public ResponseEntity<?> getRequests() {
@@ -32,6 +36,37 @@ public class RequestController {
 
         if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
             return new ResponseEntity<>(this.requestService.findAll(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(path = "/approveHoliday")
+    public ResponseEntity<?> approveHoliday(@RequestBody Request request) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            request.getHoliday().setApproved(true);
+            this.holidayService.save(request.getHoliday());
+            this.requestService.delete(request.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/declineHoliday")
+    public ResponseEntity<?> declineHoliday(@RequestBody Request request) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            this.requestService.delete(request.getId());
+            this.holidayService.delete(request.getHoliday().getId());
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
