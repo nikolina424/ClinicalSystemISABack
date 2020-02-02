@@ -3,29 +3,25 @@ package com.example.demo.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
+@Builder
 @Table
-public class Request {
+public class Holiday {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date dateOfRequest;
-    private boolean pending = false;
-    @Enumerated(EnumType.STRING)
-    private RequestRole role;
+    private Date startDate;
+    private Date finishDate;
+    private String description;
+    private boolean approved = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Holiday holiday;
 }

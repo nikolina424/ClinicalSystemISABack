@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
+import static com.example.demo.model.RequestRole.REGISTRATION;
 import static com.example.demo.model.UserRole.ADMINC;
 import static com.example.demo.model.UserRole.ADMINCC;
 
@@ -100,6 +101,7 @@ public class LoginController {
         Request newRequest = new Request();
         newRequest.setUser(newUser);
         newRequest.setDateOfRequest(new Date(timeProvider.now().getTime()));
+        newRequest.setRole(REGISTRATION);
         Request saveRequest = this.requestService.save(newRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/user/userId}").buildAndExpand(newUser.getId()).toUri());
