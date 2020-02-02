@@ -20,7 +20,12 @@ public class Request {
     private Long id;
     private Date dateOfRequest;
     private boolean pending = false;
+    @Enumerated(EnumType.STRING)
+    private RequestRole role;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Holiday holiday;
 }
