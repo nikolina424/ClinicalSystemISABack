@@ -1,7 +1,8 @@
-insert into clinic_center (name) values ('Klinicki Centar VNS');
+insert into clinic_center (name) values ('Klinicki Centar NS');
 
-insert into clinic (name) values ('Klinika 1');
-insert into clinic (name) values ('Klinika 2');
+insert into clinic (name, clinic_center_id) values ('Klinika 1', 1);
+insert into clinic (name, clinic_center_id) values ('Klinika 2', 1);
+insert into clinic (name, clinic_center_id) values ('Klinika 3', 1);
 
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
@@ -17,10 +18,10 @@ insert into operation (description, date_time, duration_hours) values ('Transpla
 insert into examination (description, date_time, duration_hours) values ('Pregled kicme', '2019-5-15', 0.5);
 insert into examination (description, date_time, duration_hours) values ('Magnetna rezonanca', '2019-12-12', 1);
 
-insert into room (number, free, operation_id) values (10, true, 1);
-insert into room (number, free, operation_id) values (11, true, 2);
-insert into room (number, free, examination_id) values (12, true, 1);
-insert into room (number, free, examination_id) values (13, false, 2);
+insert into room (number, reserved, operation_id, clinic_id) values (10, true, 1, 1);
+insert into room (number, reserved, clinic_id) values (11, false, 2);
+insert into room (number, reserved, clinic_id) values (12, false, 3);
+insert into room (number, reserved, examination_id, clinic_id) values (13, true, 2, 3);
 
 insert into sick (name, description, date_start) values ('Prehlada', 'Obicna', '2019-10-5');
 insert into sick (name, description, date_start) values ('Dijabetes', 'Nizak rizik', '2019-5-21');
@@ -53,7 +54,7 @@ insert into role_authorities (role_name, authority_name) values ('DOCTOR', 'MANA
 
 alter sequence users_id_seq restart with 5;
 alter sequence clinic_center_id_seq restart with 2;
-alter sequence clinic_id_seq restart with 3;
+alter sequence clinic_id_seq restart with 4;
 alter sequence operation_id_seq restart with 3;
 alter sequence room_id_seq restart with 5;
 alter sequence sick_id_seq restart with 5;
