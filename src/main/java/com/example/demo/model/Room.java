@@ -3,8 +3,6 @@ package com.example.demo.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,15 +18,14 @@ public class Room {
 
     @Column(name = "number", nullable = false)
     private Integer number;
+    private boolean reserved;
 
-    @Column(name = "free")
-    private Boolean free;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Operation operation;
 
-    @OneToOne
-    @JoinColumn(name = "operationId")
-    private Operation operationRoom;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Examination examination;
 
-    @OneToOne
-    @JoinColumn(name = "examinationId")
-    private Examination examinationRoom;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Clinic clinic;
 }

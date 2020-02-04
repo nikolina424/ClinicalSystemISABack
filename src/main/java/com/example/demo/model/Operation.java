@@ -28,7 +28,4 @@ public class Operation {
 
     @Column(name = "durationHours")
     private Integer duration;
-
-    @OneToOne(mappedBy = "operationRoom")
-    private Room room;
 }

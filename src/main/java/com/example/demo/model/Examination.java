@@ -27,7 +27,4 @@ public class Examination {
 
     @Column(name = "durationHours")
     private Double duration;
-
-    @OneToOne(mappedBy = "examinationRoom")
-    private Room room;
 }
