@@ -17,4 +17,7 @@ public class ClinicService {
         return this.clinicRepository.findAll();
     }
 
+    public Clinic findOneByName(String name) {
+        return this.clinicRepository.findOneByName(name);
+    }
 }
