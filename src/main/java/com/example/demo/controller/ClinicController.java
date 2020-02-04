@@ -14,20 +14,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.*;
 
-import static com.example.demo.model.UserRole.PATIENT;
+import static com.example.demo.model.UserRole.*;
 
 @RestController
 public class ClinicController {
+
     @Autowired
     private ClinicService clinicService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path="/getClinics")
     public ResponseEntity<?> getClinic(){
+
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(PATIENT.equals(user.getRole())){
+
+        if(PATIENT.equals(user.getRole()) || ADMINCC.equals(user.getRole()) || ADMINC.equals(user.getRole())){
             return new ResponseEntity<>(this.clinicService.getClinics(), HttpStatus.OK);
         }
+
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
