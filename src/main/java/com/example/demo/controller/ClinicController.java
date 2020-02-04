@@ -1,16 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Clinic;
 import com.example.demo.model.User;
 import com.example.demo.service.ClinicService;
+import com.example.demo.view.ClinicViewModify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 
@@ -30,6 +29,36 @@ public class ClinicController {
 
         if(PATIENT.equals(user.getRole()) || ADMINCC.equals(user.getRole()) || ADMINC.equals(user.getRole())){
             return new ResponseEntity<>(this.clinicService.getClinics(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path="/userClinic")
+    public ResponseEntity<?> userClinic() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            return new ResponseEntity<>(this.clinicService.findOneByAdminId(loggedUser.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/modifyClinic")
+    public ResponseEntity<?> modifyClinic(@RequestBody ClinicViewModify clinicViewModify) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            Clinic newClinic = this.clinicService.findOneById(clinicViewModify.getClinicId());
+            newClinic.setAddress(clinicViewModify.getAddress());
+            newClinic.setDescription(clinicViewModify.getDescription());
+            newClinic.setName(clinicViewModify.getName());
+            return new ResponseEntity<>(this.clinicService.save(newClinic), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

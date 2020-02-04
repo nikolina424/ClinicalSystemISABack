@@ -20,4 +20,16 @@ public class ClinicService {
     public Clinic findOneByName(String name) {
         return this.clinicRepository.findOneByName(name);
     }
+
+    public Clinic findOneByAdminId(Long id) {
+        return this.clinicRepository.findOneByAdminId(id);
+    }
+
+    public Clinic findOneById(Long id) {
+        return this.clinicRepository.findOneById(id);
+    }
+
+    public Clinic save(Clinic clinic) {
+        return this.clinicRepository.save(clinic);
+    }
 }

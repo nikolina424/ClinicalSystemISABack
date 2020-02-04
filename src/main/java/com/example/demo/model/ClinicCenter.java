@@ -20,4 +20,7 @@ public class ClinicCenter {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User admin;
 }

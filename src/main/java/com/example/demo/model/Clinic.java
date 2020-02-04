@@ -21,6 +21,12 @@ public class Clinic {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    private String description;
+    private String address;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private ClinicCenter clinicCenter;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User admin;
 }
