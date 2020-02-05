@@ -1,9 +1,7 @@
 package com.example.demo.model;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,4 +27,12 @@ public class Clinic {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User admin;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_work",
+            joinColumns = @JoinColumn(name = "clinic_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
+    private List<User> userList;
 }
