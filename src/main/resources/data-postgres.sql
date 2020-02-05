@@ -3,6 +3,9 @@ insert into users (first_name, last_name, email, password, address, city, countr
 insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Admin2', 'Admin2', 'admin2@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Novaka Pejicica 145', 'Kula', 'Srbija', 0619800430, 43123232, 'ADMINC', true, true, true);
 insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Admin3', 'Admin3', 'admin3@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Zarka Zrenjanina 10a', 'Kula', 'Srbija', 063434556, 451334313, 'ADMINC', true, true, true);
 insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Nikolina', 'Ivankovic', 'inina007@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Marsala Tita 6', 'Kula', 'Srbija', 0659438132, 1505997, 'DOCTOR', true, true, true);
+insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Doctor1', 'Doctor1', 'doctor1@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Knezova 404', 'Beograd', 'Srbija', 0643948313, 32143143, 'DOCTOR', true, true, true);
+insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Doctor2', 'Doctor2', 'doctor2@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Pupinova 3', 'Krusevac', 'Srbija', 0659438391, 3213213, 'DOCTOR', true, true, true);
+insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Doctor3', 'Doctor3', 'doctor3@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Nikola Tesla 30', 'Smederevo', 'Srbija', 0613323343, 431542413, 'DOCTOR', true, true, true);
 insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Marko', 'Markic', 'mmic@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Kisacka 41', 'Novi Sad', 'Srbija', 0634850341, 9834130, 'PATIENT', true, true, true);
 insert into users (first_name, last_name, email, password, address, city, country, phone_number, user_id, role, enabled, first_time_logged, predefined) values ('Nikola', 'Narkic', 'nark@gmail.com', '$2a$10$LUg80LWtePrHM/Oba6pJHu0BKXjgCA4GcbeTB6TD4Yos3APqstUCy', 'Krusevacka 3', 'Krusevac', 'Srbija', 0624831490, 5503491, 'PATIENT', true, true, true);
 
@@ -11,6 +14,16 @@ insert into clinic_center (name, admin_id) values ('Klinicki Centar NS', 1);
 insert into clinic (name, description, address, clinic_center_id, admin_id) values ('Klinika 1', 'Opsta bolnica', 'Cara Dusana 55', 1, 2);
 insert into clinic (name, description, address, clinic_center_id, admin_id) values ('Klinika 2', 'Infektivna klinika', 'Zvezdara 13a', 1, 3);
 insert into clinic (name, description, address, clinic_center_id, admin_id) values ('Klinika 3', 'Hirurska klinika', 'Kramerova 2', 1, 4);
+
+insert into user_work (clinic_id, user_id) values (1, 2);
+insert into user_work (clinic_id, user_id) values (2, 3);
+insert into user_work (clinic_id, user_id) values (3, 4);
+insert into user_work (clinic_id, user_id) values (1, 5);
+insert into user_work (clinic_id, user_id) values (1, 6);
+insert into user_work (clinic_id, user_id) values (2, 7);
+insert into user_work (clinic_id, user_id) values (3, 8);
+insert into user_work (clinic_id, user_id) values (1, 9);
+insert into user_work (clinic_id, user_id) values (1, 10);
 
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
@@ -55,7 +68,7 @@ insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MAN
 insert into role_authorities (role_name, authority_name) values ('ADMINCC', 'MANAGE_CLINIC');
 insert into role_authorities (role_name, authority_name) values ('DOCTOR', 'MANAGE_OPERATION');
 
-alter sequence users_id_seq restart with 8;
+alter sequence users_id_seq restart with 11;
 alter sequence clinic_center_id_seq restart with 2;
 alter sequence clinic_id_seq restart with 4;
 alter sequence operation_id_seq restart with 3;

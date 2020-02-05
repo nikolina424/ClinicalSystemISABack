@@ -13,12 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.websocket.server.PathParam;
 import java.util.List;
 
-import static com.example.demo.model.UserRole.ADMINCC;
-import static com.example.demo.model.UserRole.DOCTOR;
+import static com.example.demo.model.UserRole.*;
 
 @RestController
 public class UserController {
@@ -28,6 +25,19 @@ public class UserController {
 
     @Autowired
     private StorageService storageService;
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getDoctorsClinic")
+    public ResponseEntity<?> getDoctorsClinic() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            return new ResponseEntity<>(this.userService.findAllById(loggedUser.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/getPatients")
@@ -97,6 +107,37 @@ public class UserController {
 
         if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
             return new ResponseEntity<>(this.userService.saveAdminCC(user), HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(value = "/addNewDoctor")
+    public ResponseEntity<?> addNewDoctor(@RequestBody UserViewRegister user) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            User newDoctor = this.userService.saveDoctor(user);
+            Long clinicId = this.userService.findClinicId(loggedUser.getId());
+            this.userService.addWorkDoctor(clinicId, newDoctor.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/deleteUser")
+    public ResponseEntity<?> deleteUser(@RequestBody User user) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            this.userService.deleteUserFromUserWork(user.getId());
+            this.userService.deleteUser(user.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
