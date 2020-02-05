@@ -3,6 +3,7 @@ package com.example.demo.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,4 +29,20 @@ public class Room {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Clinic clinic;
+
+    @ManyToMany
+    @JoinTable(
+            name = "examination_room",
+            joinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "examination_id", referencedColumnName = "id")
+    )
+    private List<Examination> examinationList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "operation_room",
+            joinColumns = @JoinColumn(name = "room_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "operation_id", referencedColumnName = "id")
+    )
+    private List<Operation> operationList;
 }

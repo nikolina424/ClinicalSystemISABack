@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -22,10 +23,15 @@ public class Operation {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "price")
+    private Double price;
+
     @Column(name = "dateTime", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Calendar dateTime;
+    private Date dateTime;
 
     @Column(name = "durationHours")
     private Integer duration;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User doctor;
 }

@@ -28,16 +28,29 @@ insert into user_work (clinic_id, user_id) values (1, 10);
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
 
-insert into operation (description, date_time, duration_hours) values ('Transplatacija bubrega', '2019-9-8', 7);
-insert into operation (description, date_time, duration_hours) values ('Transplatacija srca', '2019-3-25', 12);
+insert into operation (description, date_time, duration_hours, price, doctor_id) values ('Transplatacija bubrega', '2019-9-8', 7, 10000, 5);
+insert into operation (description, date_time, duration_hours, price, doctor_id) values ('Transplatacija srca', '2019-3-25', 12, 25000, 6);
 
-insert into examination (description, date_time, duration_hours) values ('Pregled kicme', '2019-5-15', 0.5);
-insert into examination (description, date_time, duration_hours) values ('Magnetna rezonanca', '2019-12-12', 1);
+insert into examination (description, date_time, duration_hours, price, doctor_id) values ('Pregled kicme', '2019-5-15', 0.5, 20, 7);
+insert into examination (description, date_time, duration_hours, price, doctor_id) values ('Magnetna rezonanca', '2019-12-12', 1, 200, 8);
 
 insert into room (number, reserved, operation_id, clinic_id) values (10, true, 1, 1);
 insert into room (number, reserved, clinic_id) values (11, false, 2);
 insert into room (number, reserved, clinic_id) values (12, false, 3);
 insert into room (number, reserved, examination_id, clinic_id) values (13, true, 2, 3);
+insert into room (number, reserved, operation_id, clinic_id) values (15, true, 2, 1);
+insert into room (number, reserved, examination_id, clinic_id) values (20, true, 1, 2);
+insert into room (number, reserved, clinic_id) values (21, false, 1);
+insert into room (number, reserved, clinic_id) values (22, false, 1);
+insert into room (number, reserved, clinic_id) values (31, false, 1);
+insert into room (number, reserved, clinic_id) values (40, false, 2);
+insert into room (number, reserved, clinic_id) values (41, false, 3);
+
+insert into operation_room (room_id, operation_id) values (1, 1);
+insert into operation_room (room_id, operation_id) values (5, 2);
+
+insert into examination_room (room_id, examination_id) values (6, 1);
+insert into examination_room (room_id, examination_id) values (4, 2);
 
 insert into sick (name, description, date_start) values ('Prehlada', 'Obicna', '2019-10-5');
 insert into sick (name, description, date_start) values ('Dijabetes', 'Nizak rizik', '2019-5-21');

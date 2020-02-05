@@ -13,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.demo.model.UserRole.ADMINC;
-import static com.example.demo.model.UserRole.ADMINCC;
+import static com.example.demo.model.UserRole.*;
 
 @RestController
 public class RoomController {
@@ -24,6 +23,33 @@ public class RoomController {
 
     @Autowired
     private ClinicService clinicService;
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getClinicRoomsFromDoctor")
+    public ResponseEntity<?> getClinicRoomsFromDoctor() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (DOCTOR.equals(loggedUser.getRole())) {
+            return new ResponseEntity<>(this.roomService.findAllByDoctorId(loggedUser.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getClinicRooms")
+    public ResponseEntity<?> getClinicRooms() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            Clinic clinic = clinicService.findOneByAdminId(loggedUser.getId());
+            return new ResponseEntity<>(this.roomService.findAllByClinicIdAndNotReserved(clinic.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/getAllRooms")

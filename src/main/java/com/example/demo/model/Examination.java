@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -21,10 +22,15 @@ public class Examination {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "price")
+    private Double price;
+
     @Column(name = "dateTime", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Calendar dateTime;
+    private Date dateTime;
 
     @Column(name = "durationHours")
     private Double duration;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User doctor;
 }
