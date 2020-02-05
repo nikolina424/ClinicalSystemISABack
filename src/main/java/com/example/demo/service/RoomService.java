@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Clinic;
 import com.example.demo.model.Room;
 import com.example.demo.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,21 @@ public class RoomService {
 
     public void deleteRoom(Long id) {
         this.roomRepository.deleteRoom(id);
+    }
+
+    public List<Room> findAllByClinicIdAndNotReserved(Long id) {
+        return this.roomRepository.findAllByClinicIdAndReserved(id, false);
+    }
+
+    public List<Room> findAllByDoctorId(Long id) {
+        return this.roomRepository.findAllByDoctorId(id);
+    }
+
+    public void setExToRoom(Long roomId, Long examinationId) {
+        this.roomRepository.setExToRoom(roomId, examinationId);
+    }
+
+    public void setOpToRoom(Long roomId, Long operationId) {
+        this.roomRepository.setOpToRoom(roomId, operationId);
     }
 }
