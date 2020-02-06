@@ -38,11 +38,23 @@ public class RoomService {
         return this.roomRepository.findAllByDoctorId(id);
     }
 
+    public List<Room> findAllByClinicId(Long id) {
+        return this.roomRepository.findAllByClinicId(id);
+    }
+
     public void setExToRoom(Long roomId, Long examinationId) {
         this.roomRepository.setExToRoom(roomId, examinationId);
     }
 
     public void setOpToRoom(Long roomId, Long operationId) {
         this.roomRepository.setOpToRoom(roomId, operationId);
+    }
+
+    public Room findRoomByExamination(Long id) {
+        return this.roomRepository.findOneByExaminationId(id);
+    }
+
+    public Room findRoomByOperation(Long id) {
+        return this.roomRepository.findOneByOperationId(id);
     }
 }

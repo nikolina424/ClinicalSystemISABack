@@ -52,12 +52,28 @@ public class RoomController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getAllClinicRooms")
+    public ResponseEntity<?> getAllClinicRooms() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            Clinic clinic = clinicService.findOneByAdminId(loggedUser.getId());
+            return new ResponseEntity<>(this.roomService.findAllByClinicId(clinic.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/getAllRooms")
     public ResponseEntity<?> getAllRooms() {
 
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if ((ADMINCC.equals(loggedUser.getRole()) || ADMINC.equals(loggedUser.getRole())))
+        if (ADMINCC.equals(loggedUser.getRole()))
             return new ResponseEntity<>(this.roomService.findAll(), HttpStatus.OK);
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

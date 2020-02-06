@@ -19,7 +19,11 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query(nativeQuery = true, value = "delete from room r where r.id=:id")
     void deleteRoom(@Param("id") Long id);
 
+    Room findOneByExaminationId(Long id);
+    Room findOneByOperationId(Long id);
+
     List<Room> findAllByClinicIdAndReserved(Long id, boolean reserved);
+    List<Room> findAllByClinicId(Long id);
 
     @Query(nativeQuery = true, value = "select * from room r left join user_work uw on r.clinic_id = uw.clinic_id where r.reserved = false and uw.user_id=:id")
     List<Room> findAllByDoctorId(@Param("id") Long id);
