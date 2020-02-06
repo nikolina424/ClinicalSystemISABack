@@ -109,6 +109,24 @@ public class LoginController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/changeAdminPassword")
+    public ResponseEntity<?> changeAdminPassword(@RequestBody UserViewChangePassword user) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(ADMINC.equals(loggedUser.getRole()) || ADMINCC.equals(loggedUser.getRole())) {
+            if (user.getNewPass().equals(user.getNewRepeatPass())) {
+                if (passwordEncoder.matches(user.getOldPass(), loggedUser.getPassword())) {
+                    loggedUser.setPassword(passwordEncoder.encode(user.getNewPass()));
+                    return new ResponseEntity<>(this.userService.save(loggedUser), HttpStatus.OK);
+                }
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody UserViewChangePassword user) {
 
