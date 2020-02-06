@@ -1,23 +1,21 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Examination;
+import com.example.demo.model.Operation;
 import com.example.demo.model.Room;
 import com.example.demo.model.User;
 import com.example.demo.service.ExaminationService;
 import com.example.demo.service.RoomService;
+import com.example.demo.view.ExaminationViewModify;
 import com.example.demo.view.ExaminationViewSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.example.demo.model.UserRole.ADMINC;
-import static com.example.demo.model.UserRole.DOCTOR;
+import static com.example.demo.model.UserRole.*;
 
 @RestController
 public class ExaminationController {
@@ -27,6 +25,69 @@ public class ExaminationController {
 
     @Autowired
     private RoomService roomService;
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getExaminationsOfClinic")
+    public ResponseEntity<?> getExaminationsOfClinic() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) || ADMINC.equals(loggedUser.getRole())) {
+            return new ResponseEntity<>(this.examinationService.findExaminationsOfClinic(loggedUser.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/modifyExamination")
+    public ResponseEntity<?> modifyExamination(@RequestBody ExaminationViewModify ex) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            Examination newEx = this.examinationService.findOneById(ex.getId());
+            newEx.setDescription(ex.getDescription());
+            newEx.setDoctor(ex.getDoctor());
+            newEx.setDuration(ex.getDuration());
+            newEx.setPrice(ex.getPrice());
+            return new ResponseEntity<>(this.examinationService.save(newEx), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getExaminations")
+    public ResponseEntity<?> getExaminations() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) || ADMINC.equals(loggedUser.getRole())) {
+            return new ResponseEntity<>(this.examinationService.findAll(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/deleteExamination")
+    public ResponseEntity<?> deleteExamination(@RequestBody Examination ex) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINC.equals(loggedUser.getRole())) {
+            Room room = this.roomService.findRoomByExamination(ex.getId());
+            room.setExamination(null);
+            room.setReserved(false);
+            this.roomService.save(room);
+            this.examinationService.deleteExaminationRoom(ex.getId());
+            this.examinationService.deleteExamination(ex.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path="/scheduleExamination")
