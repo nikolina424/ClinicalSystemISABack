@@ -30,7 +30,7 @@ public class Operation {
     private Date dateTime;
 
     @Column(name = "durationHours")
-    private Integer duration;
+    private Double duration;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User doctor;
