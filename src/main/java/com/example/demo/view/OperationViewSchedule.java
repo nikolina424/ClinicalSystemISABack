@@ -17,7 +17,7 @@ import java.util.Date;
 public class OperationViewSchedule {
 
     private String description;
-    private Integer duration;
+    private Double duration;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateTime;
     private Double price;
