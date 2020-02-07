@@ -140,6 +140,11 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
+        if (ADMINCC.equals(loggedUser.getRole())) {
+            this.userService.deleteUser(user.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
