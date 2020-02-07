@@ -31,8 +31,7 @@ import java.sql.Date;
 import java.util.List;
 
 import static com.example.demo.model.RequestRole.REGISTRATION;
-import static com.example.demo.model.UserRole.ADMINC;
-import static com.example.demo.model.UserRole.ADMINCC;
+import static com.example.demo.model.UserRole.*;
 
 @RestController
 public class LoginController {
@@ -114,7 +113,7 @@ public class LoginController {
 
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(ADMINC.equals(loggedUser.getRole()) || ADMINCC.equals(loggedUser.getRole())) {
+        if(!PATIENT.equals(loggedUser.getRole())) {
             if (user.getNewPass().equals(user.getNewRepeatPass())) {
                 if (passwordEncoder.matches(user.getOldPass(), loggedUser.getPassword())) {
                     loggedUser.setPassword(passwordEncoder.encode(user.getNewPass()));
