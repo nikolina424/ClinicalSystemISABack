@@ -28,6 +28,9 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query(nativeQuery = true, value = "select * from room r left join user_work uw on r.clinic_id = uw.clinic_id where r.reserved = false and uw.user_id=:id")
     List<Room> findAllByDoctorId(@Param("id") Long id);
 
+    @Query(nativeQuery = true, value = "select * from room r left join user_work uw on r.clinic_id = uw.clinic_id where uw.user_id=:id")
+    List<Room> findAllByWorkUser(@Param("id") Long id);
+
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "insert into examination_room (room_id, examination_id) values (:roomId, :examinationId)")

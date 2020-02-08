@@ -38,6 +38,19 @@ public class RoomController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getAllRoomsFromDoctor")
+    public ResponseEntity<?> getAllRoomsFromDoctor() {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (DOCTOR.equals(loggedUser.getRole())) {
+            return new ResponseEntity<>(this.roomService.findAllByWorkUser(loggedUser.getId()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/getClinicRooms")
     public ResponseEntity<?> getClinicRooms() {
 
