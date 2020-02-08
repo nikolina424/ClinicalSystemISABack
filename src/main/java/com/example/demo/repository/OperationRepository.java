@@ -23,6 +23,6 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
     @Query(nativeQuery = true, value = "delete from operation_room opr where opr.operation_id=:id")
     void deleteOperationRoom(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = "select op.id, op.date_time, op.description, op.duration_hours, op.price, op.doctor_id from operation_room opr left join operation op on opr.operation_id=op.id where opr.room_id in (select r.id from room r left join clinic cl on r.clinic_id = cl.id where cl.id = (select cl.id from clinic cl left join users us on cl.admin_id=us.id where us.id=:id) and r.reserved=true)")
+    @Query(nativeQuery = true, value = "select op.id, op.approved, op.date_time, op.description, op.duration_hours, op.price, op.doctor_id from operation_room opr left join operation op on opr.operation_id=op.id where opr.room_id in (select r.id from room r left join clinic cl on r.clinic_id = cl.id where cl.id = (select cl.id from clinic cl left join users us on cl.admin_id=us.id where us.id=:id) and r.reserved=true)")
     List<Operation> findAllOperationsOfClinic(@Param("id") Long id);
 }
