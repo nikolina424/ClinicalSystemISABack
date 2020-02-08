@@ -21,6 +21,8 @@ public class Clinic {
 
     private String description;
     private String address;
+    private float longitude;
+    private float latitude;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private ClinicCenter clinicCenter;
