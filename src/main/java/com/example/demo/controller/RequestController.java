@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Request;
-import com.example.demo.model.User;
-import com.example.demo.service.HolidayService;
-import com.example.demo.service.RequestService;
-import com.example.demo.service.UserService;
+import com.example.demo.model.*;
+import com.example.demo.service.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +24,15 @@ public class RequestController {
 
     @Autowired
     private HolidayService holidayService;
+
+    @Autowired
+    private ExaminationService examinationService;
+
+    @Autowired
+    private OperationService operationService;
+
+    @Autowired
+    private RoomService roomService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/getRequests")
@@ -51,6 +57,80 @@ public class RequestController {
             request.getHoliday().setApproved(true);
             this.holidayService.save(request.getHoliday());
             this.requestService.delete(request.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(path = "/approveExamination")
+    public ResponseEntity<?> approveExamination(@RequestBody Request request) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            request.getExamination().setApproved(true);
+            this.examinationService.save(request.getExamination());
+            this.requestService.delete(request.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(path = "/approveOperation")
+    public ResponseEntity<?> approveOperation(@RequestBody Request request) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            request.getOperation().setApproved(true);
+            this.operationService.save(request.getOperation());
+            this.requestService.delete(request.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/declineOperation")
+    public ResponseEntity<?> declineOperation(@RequestBody Request request) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            Operation op = this.operationService.findOneById(request.getOperation().getId());
+            Room room = this.roomService.findRoomByOperation(op.getId());
+            room.setOperation(null);
+            room.setReserved(false);
+            this.roomService.save(room);
+            this.operationService.deleteOperationRoom(op.getId());
+            this.requestService.delete(request.getId());
+            this.operationService.deleteOperation(op.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping(path = "/declineExamination")
+    public ResponseEntity<?> declineExamination(@RequestBody Request request) {
+
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (ADMINCC.equals(loggedUser.getRole()) && loggedUser.isPredefined()) {
+            Examination ex = this.examinationService.findOneById(request.getExamination().getId());
+            Room room = this.roomService.findRoomByExamination(ex.getId());
+            room.setExamination(null);
+            room.setReserved(false);
+            this.roomService.save(room);
+            this.examinationService.deleteExaminationRoom(ex.getId());
+            this.requestService.delete(request.getId());
+            this.examinationService.deleteExamination(ex.getId());
             return new ResponseEntity<>(HttpStatus.OK);
         }
 

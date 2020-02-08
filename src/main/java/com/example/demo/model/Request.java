@@ -28,4 +28,10 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Holiday holiday;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Examination examination;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Operation operation;
 }

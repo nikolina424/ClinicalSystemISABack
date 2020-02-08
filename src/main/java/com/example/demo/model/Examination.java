@@ -31,6 +31,9 @@ public class Examination {
     @Column(name = "durationHours")
     private Double duration;
 
+    @Column(name = "approved")
+    private boolean approved = false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User doctor;
 }

@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.TimeProvider;
 import com.example.demo.model.Operation;
+import com.example.demo.model.Request;
 import com.example.demo.model.Room;
 import com.example.demo.model.User;
 import com.example.demo.service.OperationService;
+import com.example.demo.service.RequestService;
 import com.example.demo.service.RoomService;
 import com.example.demo.view.OperationViewModify;
 import com.example.demo.view.OperationViewSchedule;
@@ -14,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
+import static com.example.demo.model.RequestRole.OPERATION;
 import static com.example.demo.model.UserRole.*;
 
 @RestController
@@ -24,6 +30,12 @@ public class OperationController {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private TimeProvider timeProvider;
+
+    @Autowired
+    private RequestService requestService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/getOperationsOfClinic")
@@ -106,6 +118,12 @@ public class OperationController {
 
         if (DOCTOR.equals(user.getRole())) {
             Operation op = this.operationService.saveDoctor(opView, user);
+            Request newRequest = new Request();
+            newRequest.setRole(OPERATION);
+            newRequest.setOperation(op);
+            newRequest.setUser(user);
+            newRequest.setDateOfRequest(new Date(timeProvider.now().getTime()));
+            this.requestService.save(newRequest);
             Room room = opView.getRoom();
             room.setReserved(true);
             room.setOperation(op);

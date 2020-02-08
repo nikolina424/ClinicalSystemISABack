@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum RequestRole {
 
-    REGISTRATION("REGISTRATION"), HOLIDAY("HOLIDAY");
+    REGISTRATION("REGISTRATION"), HOLIDAY("HOLIDAY"), EXAMINATION("EXAMINATION"), OPERATION("OPERATION");
 
     private String role;
 
