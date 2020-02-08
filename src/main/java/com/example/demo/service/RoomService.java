@@ -38,6 +38,10 @@ public class RoomService {
         return this.roomRepository.findAllByDoctorId(id);
     }
 
+    public List<Room> findAllByWorkUser(Long id) {
+        return this.roomRepository.findAllByWorkUser(id);
+    }
+
     public List<Room> findAllByClinicId(Long id) {
         return this.roomRepository.findAllByClinicId(id);
     }
