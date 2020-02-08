@@ -28,14 +28,14 @@ public class ExaminationService {
     }
 
     public Examination save(ExaminationViewSchedule ex) {
-        Examination examination = Examination.builder().description(ex.getDescription()).duration(ex.getDuration())
+        Examination examination = Examination.builder().description(ex.getDescription()).duration(ex.getDuration()).approved(true)
                                     .dateTime(ex.getDateTime()).doctor(ex.getDoctor()).price(ex.getPrice()).build();
 
         return this.examinationRepository.save(examination);
     }
 
     public Examination saveDoctor(ExaminationViewSchedule ex, User doctor) {
-        Examination examination = Examination.builder().description(ex.getDescription()).duration(ex.getDuration())
+        Examination examination = Examination.builder().description(ex.getDescription()).duration(ex.getDuration()).approved(false)
                 .dateTime(ex.getDateTime()).doctor(doctor).price(ex.getPrice()).build();
 
         return this.examinationRepository.save(examination);
