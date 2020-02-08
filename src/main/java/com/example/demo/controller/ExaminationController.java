@@ -1,10 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Examination;
-import com.example.demo.model.Operation;
-import com.example.demo.model.Room;
-import com.example.demo.model.User;
+import com.example.demo.common.TimeProvider;
+import com.example.demo.model.*;
 import com.example.demo.service.ExaminationService;
+import com.example.demo.service.RequestService;
 import com.example.demo.service.RoomService;
 import com.example.demo.view.ExaminationViewModify;
 import com.example.demo.view.ExaminationViewSchedule;
@@ -15,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
+import static com.example.demo.model.RequestRole.EXAMINATION;
 import static com.example.demo.model.UserRole.*;
 
 @RestController
@@ -25,6 +27,12 @@ public class ExaminationController {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private TimeProvider timeProvider;
+
+    @Autowired
+    private RequestService requestService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/getExaminationsOfClinic")
@@ -107,6 +115,12 @@ public class ExaminationController {
 
         if (DOCTOR.equals(user.getRole())) {
             Examination ex = this.examinationService.saveDoctor(exView, user);
+            Request newRequest = new Request();
+            newRequest.setRole(EXAMINATION);
+            newRequest.setExamination(ex);
+            newRequest.setUser(user);
+            newRequest.setDateOfRequest(new Date(timeProvider.now().getTime()));
+            this.requestService.save(newRequest);
             Room room = exView.getRoom();
             room.setReserved(true);
             room.setExamination(ex);
