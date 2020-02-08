@@ -28,14 +28,14 @@ public class OperationService {
     }
 
     public Operation save(OperationViewSchedule op) {
-        Operation operation = Operation.builder().description(op.getDescription()).duration(op.getDuration())
+        Operation operation = Operation.builder().description(op.getDescription()).duration(op.getDuration()).approved(true)
                                 .dateTime(op.getDateTime()).doctor(op.getDoctor()).price(op.getPrice()).build();
 
         return this.operationRepository.save(operation);
     }
 
     public Operation saveDoctor(OperationViewSchedule op, User doctor) {
-        Operation operation = Operation.builder().description(op.getDescription()).duration(op.getDuration())
+        Operation operation = Operation.builder().description(op.getDescription()).duration(op.getDuration()).approved(false)
                 .dateTime(op.getDateTime()).doctor(doctor).price(op.getPrice()).build();
 
         return this.operationRepository.save(operation);
