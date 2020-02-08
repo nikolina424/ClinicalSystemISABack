@@ -58,6 +58,8 @@ public class ClinicController {
             newClinic.setAddress(clinicViewModify.getAddress());
             newClinic.setDescription(clinicViewModify.getDescription());
             newClinic.setName(clinicViewModify.getName());
+            newClinic.setLongitude(clinicViewModify.getLongitude());
+            newClinic.setLatitude(clinicViewModify.getLatitude());
             return new ResponseEntity<>(this.clinicService.save(newClinic), HttpStatus.OK);
         }
 
