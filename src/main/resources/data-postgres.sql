@@ -28,11 +28,11 @@ insert into user_work (clinic_id, user_id) values (1, 10);
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
 
-insert into operation (description, date_time, duration_hours, price, doctor_id) values ('Transplatacija bubrega', '2019-9-8', 7, 10000, 5);
-insert into operation (description, date_time, duration_hours, price, doctor_id) values ('Transplatacija srca', '2019-3-25', 12, 25000, 6);
+insert into operation (description, date_time, duration_hours, price, doctor_id, approved) values ('Transplatacija bubrega', '2019-9-8', 7, 10000, 5, true);
+insert into operation (description, date_time, duration_hours, price, doctor_id, approved) values ('Transplatacija srca', '2019-3-25', 12, 25000, 6, true);
 
-insert into examination (description, date_time, duration_hours, price, doctor_id) values ('Pregled kicme', '2019-5-15', 0.5, 20, 7);
-insert into examination (description, date_time, duration_hours, price, doctor_id) values ('Magnetna rezonanca', '2019-12-12', 1, 200, 8);
+insert into examination (description, date_time, duration_hours, price, doctor_id, approved) values ('Pregled kicme', '2019-5-15', 0.5, 20, 7, true);
+insert into examination (description, date_time, duration_hours, price, doctor_id, approved) values ('Magnetna rezonanca', '2019-12-12', 1, 200, 8, true);
 
 insert into room (number, reserved, operation_id, clinic_id) values (10, true, 1, 1);
 insert into room (number, reserved, clinic_id) values (11, false, 2);
