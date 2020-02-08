@@ -11,9 +11,9 @@ insert into users (first_name, last_name, email, password, address, city, countr
 
 insert into clinic_center (name, admin_id) values ('Klinicki Centar NS', 1);
 
-insert into clinic (name, description, address, clinic_center_id, admin_id) values ('Klinika 1', 'Opsta bolnica', 'Cara Dusana 55', 1, 2);
-insert into clinic (name, description, address, clinic_center_id, admin_id) values ('Klinika 2', 'Infektivna klinika', 'Zvezdara 13a', 1, 3);
-insert into clinic (name, description, address, clinic_center_id, admin_id) values ('Klinika 3', 'Hirurska klinika', 'Kramerova 2', 1, 4);
+insert into clinic (name, description, address, clinic_center_id, admin_id, longitude, latitude) values ('Dom zdravlja NS', 'Opsta bolnica', 'Cara Dusana 55', 1, 2, 45.245625, 19.824868);
+insert into clinic (name, description, address, clinic_center_id, admin_id, longitude, latitude) values ('Klinicki centar BG', 'Infektivna klinika', 'Presevska 70', 1, 3, 44.798800, 20.498142);
+insert into clinic (name, description, address, clinic_center_id, admin_id, longitude, latitude) values ('Dom zdravlja Kula', 'Hirurska klinika', 'Djure Strugara 16', 1, 4, 45.608344, 19.532011);
 
 insert into user_work (clinic_id, user_id) values (1, 2);
 insert into user_work (clinic_id, user_id) values (2, 3);
