@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.demo.model.UserRole.ADMINCC;
+import static com.example.demo.model.UserRole.PATIENT;
 
 @RestController
 public class RequestController {
@@ -33,6 +34,9 @@ public class RequestController {
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private ClinicService clinicService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/getRequests")
@@ -166,6 +170,12 @@ public class RequestController {
             mailMessage.setFrom(loggedUser.getEmail());
             mailMessage.setText("To confirm your account registration, please click here: "
                     + "http://localhost:3000/confirm-account?token="+random + "-" + request.getUser().getId());
+
+            if (!request.getUser().getRole().equals(PATIENT)) {
+                Clinic clinic = this.clinicService.findOneByName(request.getClinicName());
+                this.requestService.saveUserIntoClinicWork(request.getUser().getId(), clinic.getId());
+            }
+
             this.requestService.sendEmail(mailMessage);
             this.requestService.delete(request.getId());
             return new ResponseEntity<>(HttpStatus.OK);

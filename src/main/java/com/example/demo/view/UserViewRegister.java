@@ -29,4 +29,5 @@ public class UserViewRegister {
     private Integer phoneNumber;
     private Integer userId;
     private String role;
+    private String clinicName;
 }

@@ -35,6 +35,13 @@ public class ClinicController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path="/getAllClinics")
+    public ResponseEntity<?> getAllClinics(){
+
+        return new ResponseEntity<>(this.clinicService.getClinics(), HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path="/userClinic")
     public ResponseEntity<?> userClinic() {
 

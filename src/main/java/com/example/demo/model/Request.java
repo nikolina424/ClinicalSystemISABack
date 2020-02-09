@@ -20,6 +20,7 @@ public class Request {
     private Long id;
     private Date dateOfRequest;
     private boolean pending = false;
+    private String clinicName;
     @Enumerated(EnumType.STRING)
     private RequestRole role;
 
