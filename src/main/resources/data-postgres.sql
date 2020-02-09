@@ -45,6 +45,7 @@ insert into room (number, reserved, clinic_id) values (22, false, 1);
 insert into room (number, reserved, clinic_id) values (31, false, 1);
 insert into room (number, reserved, clinic_id) values (40, false, 2);
 insert into room (number, reserved, clinic_id) values (41, false, 3);
+insert into room (number, reserved, clinic_id) values (50, false, 1);
 
 insert into operation_room (room_id, operation_id) values (1, 1);
 insert into operation_room (room_id, operation_id) values (5, 2);
@@ -85,7 +86,7 @@ alter sequence users_id_seq restart with 11;
 alter sequence clinic_center_id_seq restart with 2;
 alter sequence clinic_id_seq restart with 4;
 alter sequence operation_id_seq restart with 3;
-alter sequence room_id_seq restart with 5;
+alter sequence room_id_seq restart with 13;
 alter sequence sick_id_seq restart with 5;
 alter sequence visit_id_seq restart with 3;
 alter sequence medicine_id_seq restart with 4;
