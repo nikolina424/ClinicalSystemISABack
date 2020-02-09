@@ -101,6 +101,7 @@ public class LoginController {
         newRequest.setUser(newUser);
         newRequest.setDateOfRequest(new Date(timeProvider.now().getTime()));
         newRequest.setRole(REGISTRATION);
+        newRequest.setClinicName(user.getClinicName());
         Request saveRequest = this.requestService.save(newRequest);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/user/userId}").buildAndExpand(newUser.getId()).toUri());
