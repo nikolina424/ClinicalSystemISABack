@@ -97,11 +97,15 @@ public class ExaminationController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    protected User getLoggedUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path="/scheduleExamination")
     public ResponseEntity<?> scheduleExamination(@RequestBody ExaminationViewSchedule exView) {
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getLoggedUser();
 
         if (ADMINC.equals(user.getRole())) {
             Examination ex = this.examinationService.save(exView);

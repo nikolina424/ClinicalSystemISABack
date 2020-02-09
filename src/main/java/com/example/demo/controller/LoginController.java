@@ -129,6 +129,9 @@ public class LoginController {
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody UserViewChangePassword user) {
 
+        if (user.getNewPass().equals("") || user.getNewRepeatPass().equals(""))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         if (!user.getNewPass().equals(user.getNewRepeatPass()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
