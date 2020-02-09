@@ -39,4 +39,8 @@ public class RequestService {
     public void delete(Long id) {
         this.requestRepository.deleteRequest(id);
     }
+
+    public void saveUserIntoClinicWork(Long userId, Long clinicId) {
+        this.requestRepository.saveUserIntoClinicWork(userId, clinicId);
+    }
 }
