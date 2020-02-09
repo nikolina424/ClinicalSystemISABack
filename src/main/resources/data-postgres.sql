@@ -22,8 +22,6 @@ insert into user_work (clinic_id, user_id) values (1, 5);
 insert into user_work (clinic_id, user_id) values (1, 6);
 insert into user_work (clinic_id, user_id) values (2, 7);
 insert into user_work (clinic_id, user_id) values (3, 8);
-insert into user_work (clinic_id, user_id) values (1, 9);
-insert into user_work (clinic_id, user_id) values (1, 10);
 
 insert into medical_record (id) values (1);
 insert into medical_record (id) values (2);
